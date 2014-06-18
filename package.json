@@ -1,6 +1,6 @@
 {
   "name": "adler32",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Adler-32 hashing algorithm",
   "main": "index.js",
   "devDependencies": {

@@ -1,0 +1,32 @@
+{
+  "name": "adler32",
+  "version": "0.0.0",
+  "description": "Adler-32 hashing algorithm",
+  "main": "index.js",
+  "devDependencies": {
+    "mocha": ">=1.20.1",
+    "mhash": ">=1.0.0"
+  },
+  "scripts": {
+    "test": "mocha -R spec ./test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:BlueJeansAndRain/adler32.git"
+  },
+  "keywords": [
+    "checksum",
+    "hash",
+    "adler",
+    "adler32",
+    "adler-32",
+    "roll",
+    "rolling"
+  ],
+  "author": "Chris Ackerman <bluejeansandrain@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/BlueJeansAndRain/adler32/issues"
+  },
+  "homepage": "https://github.com/BlueJeansAndRain/adler32"
+}

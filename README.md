@@ -50,7 +50,8 @@ The checksum is returned as a 32bit integer, but you can easily convert it to a 
 
 ## Caveats
 
-Using a rolling window larger than 16k may cause unexpected results due to integer overflows.
+Using a rolling window larger than 35,184,372,088,832 (32TB) may cause unexpected results due to integer overflows.
+Also, it's just silly.
 
 ## Notes
 

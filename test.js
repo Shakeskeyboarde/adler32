@@ -60,6 +60,14 @@ describe('Adler32', function() {
 		it('should result in the same value as sum for each offset chunk of size 4096', function() {
 			rollTest(4096);
 		});
+
+		it('should result in the same value as sum for each offset chunk of size 8192', function() {
+			rollTest(8192);
+		});
+
+		it('should result in the same value as sum for each offset chunk of size 16384', function() {
+			rollTest(16384);
+		});
 	});
 });
 

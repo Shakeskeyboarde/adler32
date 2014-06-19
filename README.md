@@ -48,7 +48,20 @@ The checksum is returned as a 32bit integer, but you can easily convert it to a 
 
 	var hex = adler32.sum(data).toString(16);
 
-# License
+## Caveats
+
+Using a rolling window larger than 16k may cause unexpected results due to integer overflows.
+
+## Notes
+
+Modding of the upper and lower checksum words is delayed for up to 5,552 bytes when using the `sum()` method as a small
+speed optimization.
+
+This algorithm uses a base of 65521 (largest prime smaller than 65536) which is the base indicated by the original
+Adler-32 algorithm. As such, the sums calculated by this utility *will* match those calculated by the mhash module.
+Rsync uses the Adler-32 algorithm for its weak checksum, but uses a base of 65536 instead of 65521.
+
+## License
 
 The MIT License (MIT)
 

@@ -4,8 +4,10 @@ var should = require('should');
 var fs = require('fs');
 var Adler32 = require('./');
 var hash = require('mhash').hash;
+var rand = require('random-buffer');
 
-var buf = fs.readFileSync(__filename);
+//var buf = fs.readFileSync(__filename);
+var buf = rand(32768, 'adler32');
 
 describe('Adler32', function() {
 	describe('.sum(buf, adler = 1)', function() {

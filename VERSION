@@ -1,2 +1,2 @@
 0.1.0
-package.json
+package.json:/^\s*"version":\s*.*$/m

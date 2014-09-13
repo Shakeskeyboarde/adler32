@@ -71,6 +71,32 @@ describe('Adler32', function() {
 			rollTest(16384);
 		});
 	});
+
+	describe('.Hash', function () {
+		it('should hash a string', function() {
+			// Example taken from http://en.wikipedia.org/wiki/Adler-32.
+			hash = new Adler32.Hash();
+			hash.update('Wikipedia');
+			hash.digest('hex').toLowerCase().should.be.exactly('11e60398');
+		});
+
+		it('should hash a string in parts', function() {
+			hash = new Adler32.Hash();
+			hash.update('Wiki');
+			hash.update('pedia');
+			hash.digest('hex').toLowerCase().should.be.exactly('11e60398');
+		});
+
+		it('should not let you call update() after you call digest()', function() {
+			// Example taken from http://en.wikipedia.org/wiki/Adler-32.
+			hash = new Adler32.Hash();
+			hash.update('Wikipedia');
+			hash.digest('hex');
+			(function() {
+				hash.update('Moar!');
+			}).should.throw();
+		});
+	});
 });
 
 function rollTest(chunkSize)

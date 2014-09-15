@@ -97,6 +97,27 @@ describe('Adler32', function() {
 			}).should.throw();
 		});
 	});
+
+	describe('.register()', function () {
+		var crypto = require('crypto');
+		Adler32.register();
+		it('should make it so crypto.getHashes() contains adler32', function () {
+			crypto.getHashes().indexOf('adler32').should.not.equal(-1);
+		});
+		it('should make it so crypto.createHash() works for adler32', function () {
+			hash = crypto.createHash('adler32');
+			should.exist(hash);
+			hash.update('Wikipedia');
+			hash.digest('hex').toLowerCase().should.be.exactly('11e60398');
+		});
+		it('should not remove other crypto hashes', function () {
+			crypto.getHashes().indexOf('sha256').should.not.equal(-1);
+			hash = crypto.createHash('sha256');
+			should.exist(hash);
+			hash.update('Wikipedia');
+			hash.digest('hex');
+		});
+	});
 });
 
 function rollTest(chunkSize)

@@ -63,6 +63,42 @@ exports.roll = function(sum, length, oldByte, newByte)
 	return ((b << 16) | a) >>> 0;
 };
 
+var registered = false;
+
+exports.register = function()
+{
+	if(registered) return;
+	registered = true;
+
+    var crypto = require('crypto');
+	if(crypto.getHashes().indexOf('adler32') != -1)
+	{
+		console.log("WARNING: crypto module already supports adler32 - not registering")
+	}
+	else
+	{
+		var originalGetHashes = crypto.getHashes;
+		var originalCreateHash = crypto.createHash;
+
+		crypto.getHashes = function()
+		{
+			return originalGetHashes.call(crypto).concat(['adler32'])
+		};
+
+		crypto.createHash = function(hash)
+		{
+			if(hash === 'adler32')
+			{
+				return new Hash();
+			}
+			else
+			{
+				return originalCreateHash.call(crypto, hash);
+			}
+		};
+	}
+};
+
 // Provides a node.js Hash style interface for adler32: http://nodejs.org/api/crypto.html#crypto_class_hash
 var Hash = exports.Hash = function()
 {

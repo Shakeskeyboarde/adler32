@@ -48,6 +48,21 @@ The checksum is returned as a 32bit integer, but you can easily convert it to a 
 
 	var hex = adler32.sum(data).toString(16);
 
+## `crypto` Integration
+
+adler32 supports integration with the [node.js crypto module](http://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm).
+To use, somewhere at the start of your application you should call `register()`.
+After this you can create hashes via `crypto.creashHash()`:
+
+    adler32.register();
+    var hash = crypto.createHash('adler32');
+	hash.update(data);
+	console.log(hash.digest('hex'));
+
+You can also create hash objects via the Hash constructor:
+
+    var hash = new adler32.Hash();
+
 ## Caveats
 
 Using a rolling window larger than 35,184,372,088,832 (32TB) may cause unexpected results due to integer overflows.

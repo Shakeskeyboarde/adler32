@@ -10,7 +10,7 @@
     "random-buffer": "^0.1.0"
   },
   "scripts": {
-    "test": "mocha -R spec ./test.js",
+    "test": "mocha -t 10000 -R spec ./test.js",
     "bench": "./bench.js"
   },
   "repository": {

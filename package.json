@@ -1,6 +1,6 @@
 {
   "name": "adler32",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Adler-32 hashing algorithm",
   "main": "index.js",
   "devDependencies": {
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:BlueJeansAndRain/adler32.git"
+    "url": "git@github.com:ChrisAckerman/adler32.git"
   },
   "keywords": [
     "checksum",
@@ -29,7 +29,7 @@
   "author": "Chris Ackerman <bluejeansandrain@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BlueJeansAndRain/adler32/issues"
+    "url": "https://github.com/ChrisAckerman/adler32/issues"
   },
-  "homepage": "https://github.com/BlueJeansAndRain/adler32"
+  "homepage": "https://github.com/ChrisAckerman/adler32"
 }

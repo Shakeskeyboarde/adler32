@@ -62,3 +62,77 @@ exports.roll = function(sum, length, oldByte, newByte)
 
 	return ((b << 16) | a) >>> 0;
 };
+
+var registered = false;
+
+exports.register = function()
+{
+	if(registered) return;
+	registered = true;
+
+    var crypto = require('crypto');
+	if(crypto.getHashes().indexOf('adler32') != -1)
+	{
+		console.log("WARNING: crypto module already supports adler32 - not registering")
+	}
+	else
+	{
+		var originalGetHashes = crypto.getHashes;
+		var originalCreateHash = crypto.createHash;
+
+		crypto.getHashes = function()
+		{
+			return originalGetHashes.call(crypto).concat(['adler32'])
+		};
+
+		crypto.createHash = function(hash)
+		{
+			if(hash === 'adler32')
+			{
+				return new Hash();
+			}
+			else
+			{
+				return originalCreateHash.call(crypto, hash);
+			}
+		};
+	}
+};
+
+// Provides a node.js Hash style interface for adler32: http://nodejs.org/api/crypto.html#crypto_class_hash
+var Hash = exports.Hash = function()
+{
+	this.adler = 1;
+	this.done = false;
+};
+
+Hash.prototype.update = function(data, encoding)
+{
+	if (this.done) throw new Error("Cannot call update() after calling digest()");
+
+	if (!(data instanceof Buffer))
+	{
+		if (encoding == null) {
+			data = new Buffer(data, 'binary');
+		}
+		else
+		{
+			data = new Buffer(data, encoding);
+		}
+	}
+
+    return this.adler = exports.sum(data, this.adler);
+};
+
+Hash.prototype.digest = function(encoding)
+{
+ 	if (encoding == null) {
+		encoding = 'binary';
+	}
+
+	this.done = true;
+
+	var answer = new Buffer(4);
+	answer.writeUInt32BE(this.adler, 0);
+	return answer.toString(encoding);
+};

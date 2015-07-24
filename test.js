@@ -71,6 +71,53 @@ describe('Adler32', function() {
 			rollTest(16384);
 		});
 	});
+
+	describe('.Hash', function () {
+		it('should hash a string', function() {
+			// Example taken from http://en.wikipedia.org/wiki/Adler-32.
+			hash = new Adler32.Hash();
+			hash.update('Wikipedia');
+			hash.digest('hex').toLowerCase().should.be.exactly('11e60398');
+		});
+
+		it('should hash a string in parts', function() {
+			hash = new Adler32.Hash();
+			hash.update('Wiki');
+			hash.update('pedia');
+			hash.digest('hex').toLowerCase().should.be.exactly('11e60398');
+		});
+
+		it('should not let you call update() after you call digest()', function() {
+			// Example taken from http://en.wikipedia.org/wiki/Adler-32.
+			hash = new Adler32.Hash();
+			hash.update('Wikipedia');
+			hash.digest('hex');
+			(function() {
+				hash.update('Moar!');
+			}).should.throw();
+		});
+	});
+
+	describe('.register()', function () {
+		var crypto = require('crypto');
+		Adler32.register();
+		it('should make it so crypto.getHashes() contains adler32', function () {
+			crypto.getHashes().indexOf('adler32').should.not.equal(-1);
+		});
+		it('should make it so crypto.createHash() works for adler32', function () {
+			hash = crypto.createHash('adler32');
+			should.exist(hash);
+			hash.update('Wikipedia');
+			hash.digest('hex').toLowerCase().should.be.exactly('11e60398');
+		});
+		it('should not remove other crypto hashes', function () {
+			crypto.getHashes().indexOf('sha256').should.not.equal(-1);
+			hash = crypto.createHash('sha256');
+			should.exist(hash);
+			hash.update('Wikipedia');
+			hash.digest('hex');
+		});
+	});
 });
 
 function rollTest(chunkSize)

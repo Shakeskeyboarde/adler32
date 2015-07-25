@@ -1,64 +1,11 @@
 #!/usr/bin/env node
 "use strict";
 
-/**
- * Largest prime smaller than 2^16 (65536)
- */
-var BASE = 65521;
+var algorithm = require('./lib/algorithm');
+var Hash = require('./lib/Hash');
+var register = require('./lib/register');
 
-/**
- * Largest value n such that 255n(n+1)/2 + (n+1)(BASE-1) <= 2^32-1
- *
- * NMAX is just how often modulo needs to be taken of the two checksum word halves to prevent overflowing a 32 bit
- * integer. This is an optimization. We "could" take the modulo after each byte, and it must be taken before each
- * digest.
- */
-var NMAX = 5552;
-
-exports.sum = function(buf, adler)
-{
-	if (adler == null)
-		adler = 1;
-
-	var a = adler & 0xFFFF,
-		b = (adler >>> 16) & 0xFFFF,
-		i = 0,
-		max = buf.length,
-		n, value;
-
-	while (i < max)
-	{
-		n = Math.min(NMAX, max - i);
-
-		do
-		{
-			a += buf[i++]<<0;
-			b += a;
-		}
-		while (--n);
-
-		a %= BASE;
-		b %= BASE;
-	}
-
-	return ((b << 16) | a) >>> 0;
-};
-
-exports.roll = function(sum, length, oldByte, newByte)
-{
-	var a = sum & 0xFFFF,
-		b = (sum >>> 16) & 0xFFFF;
-
-	if (newByte != null)
-	{
-		a = (a - oldByte + newByte + BASE) % BASE;
-		b = (b - ((length * oldByte) % BASE) + a - 1 + BASE) % BASE;
-	}
-	else
-	{
-		a = (a - oldByte + BASE) % BASE;
-		b = (b - ((length * oldByte) % BASE) - 1 + BASE) % BASE;
-	}
-
-	return ((b << 16) | a) >>> 0;
-};
+exports.sum = algorithm.sum.bind(algorithm);
+exports.roll = algorithm.roll.bind(algorithm);
+exports.Hash = Hash;
+exports.register = register;

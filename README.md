@@ -48,20 +48,33 @@ The checksum is returned as a 32bit integer, but you can easily convert it to a 
 
 	var hex = adler32.sum(data).toString(16);
 
-## `crypto` Integration
+## `crypto` Module Integration
 
-adler32 supports integration with the [node.js crypto module](http://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm).
-To use, somewhere at the start of your application you should call `register()`.
-After this you can create hashes via `crypto.creashHash()`:
+The adler32 algorithm can be integrated with the
+[Node.js crypto module](http://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm). Calling the
+`adler32.register()` static method will add the 'adler32' key to the crypto module's algorithm list.
 
-    adler32.register();
-    var hash = crypto.createHash('adler32');
-	hash.update(data);
-	console.log(hash.digest('hex'));
+Create an adler32 Hash instance using the crypto module:
 
-You can also create hash objects via the Hash constructor:
+	// Adds the 'adler32' key to the crypto.createHash() method.
+	adler32.register();
 
-    var hash = new adler32.Hash();
+	// Get an adler32 hash instance.
+	var hash = crypto.createHash('adler32');
+
+	// Add ascii data to the hash.
+	hash.update(data, 'ascii');
+
+	// Get a digest of all data added to the hash.
+	var digest = hash.digest('hex');
+
+Create an adler32 Hash instance directly:
+
+	var hash = new adler32.Hash();
+
+Like the `crypto.Hash` class, `adler32.Hash` extends the `stream.Transform` class. You can use the stream `.write()` and
+`.read()` methods in place of the deprecated `.update()` and `.digest()` methods. See the
+[Node.js stream module](http://nodejs.org/api/stream.html) documentation for more information about streaming.
 
 ## Caveats
 

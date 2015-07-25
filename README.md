@@ -72,9 +72,26 @@ Create an adler32 Hash instance directly:
 
 	var hash = new adler32.Hash();
 
+## Transform Stream Usage
+
 Like the `crypto.Hash` class, `adler32.Hash` extends the `stream.Transform` class. You can use the stream `.write()` and
-`.read()` methods in place of the deprecated `.update()` and `.digest()` methods. See the
-[Node.js stream module](http://nodejs.org/api/stream.html) documentation for more information about streaming.
+`.read()` methods in place of the legacy `.update()` and `.digest()` methods.
+
+	var hash = new adler32.Hash({
+		encoding: 'hex' // Sets the type of data returned by the read() method. Defaults to 'buffer'.
+	});
+
+	// Write data to the stream in multiple chunks.
+	hash.write('foo');
+	hash.write('bar');
+
+	// This is important! No data will be available for reading until end() is called.
+	hash.end();
+
+	// Read should return a hexidecimal formatted string due to the encoding option being set to 'hex'.
+	var hex_digest = hash.read();
+
+See the [Node.js stream module](http://nodejs.org/api/stream.html) documentation for more information about streaming.
 
 ## Caveats
 
